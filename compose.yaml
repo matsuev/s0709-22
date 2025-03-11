@@ -1,0 +1,7 @@
+services:
+  mysuperapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 7080:7080
