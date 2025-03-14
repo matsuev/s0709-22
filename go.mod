@@ -1,6 +1,6 @@
 module s0709-22
 
-go 1.22.9
+go 1.22.12
 
 require github.com/gofiber/fiber/v2 v2.52.6
 

@@ -3,6 +3,8 @@
 
 FROM golang:1.24.1-alpine3.21 AS builder
 
+ENV GOCACHE=/root/.cache/go-build
+
 WORKDIR /myapp
 
 COPY ./cmd ./cmd
@@ -12,7 +14,8 @@ COPY ./go.mod ./go.sum ./
 
 COPY ./internal ./internal
 
-RUN go build -o app ./cmd/main.go
+RUN --mount=type=cache,target="/root/.cache/go-build" \
+   go build -o app ./cmd/main.go
 
 
 # STEP-2
