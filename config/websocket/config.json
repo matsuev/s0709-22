@@ -18,7 +18,6 @@
       }
    },
    "admin": {
-      "password": "password",
       "secret": "secret",
       "enabled": true
    }
