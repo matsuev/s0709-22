@@ -1,9 +1,14 @@
 {
    "client": {
-      "allow_anonymous_connect_without_token": true,
       "allowed_origins": [
          "*"
-      ]
+      ],
+      "proxy": {
+         "connect": {
+            "enabled": true,
+            "endpoint": "http://host.docker.internal:6080/connect"
+         }
+      }
    },
    "http_api": {
       "key": "my_api_key"
@@ -12,9 +17,9 @@
       "without_namespace": {
          "allow_subscribe_for_client": true,
          "allow_subscribe_for_anonymous": true,
-         "presence": true,
-         "history_size": 10,
-         "history_ttl": "30s"
+         "allow_publish_for_client": true,
+         "allow_publish_for_anonymous": true,
+         "allow_publish_for_subscriber": true
       }
    },
    "admin": {
