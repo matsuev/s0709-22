@@ -16,10 +16,66 @@ func main() {
 	}
 }
 
+// ConnectRequest ..
+type ConnectRequest struct {
+	Client string      `json:"client"`
+	Data   UserConnect `json:"data"`
+}
+
+// UserConnect ...
+type UserConnect struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
+// ConnectResponse ...
+type ConnectResponse struct {
+	Result     *ConnectResult `json:"result,omitempty"`
+	Error      *Error         `json:"error,omitempty"`
+	Disconnect *Disconnect    `json:"disconnect,omitempty"`
+}
+
+// Error ...
+type Error struct {
+	Code    int    `json:"code"`
+	Message string `json:"message,omitempty"`
+}
+
+// Disconnect ...
+type Disconnect struct {
+	Code   int    `json:"code"`
+	Reason string `json:"reason,omitempty"`
+}
+
+// ConnectResult ...
+type ConnectResult struct {
+	User string `json:"user"`
+}
+
 func connectHandler(ctx *fiber.Ctx) error {
-	return ctx.JSON(fiber.Map{
-		"result": fiber.Map{
-			"user": "alex",
+	req := &ConnectRequest{}
+
+	if err := ctx.BodyParser(req); err != nil {
+		return ctx.JSON(ConnectResponse{
+			Error: &Error{
+				Code:    107,
+				Message: "bad request",
+			},
+		})
+	}
+
+	if req.Data.Username != "alex" || req.Data.Password != "password" {
+		return ctx.JSON(ConnectResponse{
+			Error: &Error{
+				Code:    101,
+				Message: "unauthorized",
+			},
+		})
+	}
+
+	return ctx.JSON(ConnectResponse{
+		Result: &ConnectResult{
+			User: req.Data.Username,
 		},
 	})
 }
