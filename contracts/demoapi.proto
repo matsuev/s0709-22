@@ -8,6 +8,14 @@ service DemoService {
    rpc Echo(EchoRequest) returns (EchoRequest);
 }
 
+message FullName {
+   string GivenName = 1;
+   string FamilyName = 2;
+}
+
 message EchoRequest {
    string message = 1;
+   FullName full_name = 2;
+   repeated string emails = 5;
+   optional string description = 10;
 }
