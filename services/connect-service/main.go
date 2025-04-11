@@ -2,80 +2,31 @@ package main
 
 import (
 	"log"
+	"net"
+	"s0709-22/internal/proxyproto"
+	"s0709-22/services/connect-service/internal/service"
 
-	"github.com/gofiber/fiber/v2"
+	"google.golang.org/grpc"
 )
 
 func main() {
-	app := fiber.New()
-
-	app.Post("/connect", connectHandler)
-
-	if err := app.Listen("127.0.0.1:6080"); err != nil {
+	listener, err := net.Listen("tcp4", "127.0.0.1:10000")
+	if err != nil {
 		log.Fatalln(err)
 	}
-}
+	defer func() {
+		if err := listener.Close(); err != nil {
+			log.Println(err)
+		}
+	}()
 
-// ConnectRequest ..
-type ConnectRequest struct {
-	Client string      `json:"client"`
-	Data   UserConnect `json:"data"`
-}
+	srv := grpc.NewServer()
 
-// UserConnect ...
-type UserConnect struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
-}
+	svc := service.New()
 
-// ConnectResponse ...
-type ConnectResponse struct {
-	Result     *ConnectResult `json:"result,omitempty"`
-	Error      *Error         `json:"error,omitempty"`
-	Disconnect *Disconnect    `json:"disconnect,omitempty"`
-}
+	proxyproto.RegisterCentrifugoProxyServer(srv, svc)
 
-// Error ...
-type Error struct {
-	Code    int    `json:"code"`
-	Message string `json:"message,omitempty"`
-}
-
-// Disconnect ...
-type Disconnect struct {
-	Code   int    `json:"code"`
-	Reason string `json:"reason,omitempty"`
-}
-
-// ConnectResult ...
-type ConnectResult struct {
-	User string `json:"user"`
-}
-
-func connectHandler(ctx *fiber.Ctx) error {
-	req := &ConnectRequest{}
-
-	if err := ctx.BodyParser(req); err != nil {
-		return ctx.JSON(ConnectResponse{
-			Error: &Error{
-				Code:    107,
-				Message: "bad request",
-			},
-		})
+	if err := srv.Serve(listener); err != nil {
+		log.Println()
 	}
-
-	if req.Data.Username != "alex" || req.Data.Password != "password" {
-		return ctx.JSON(ConnectResponse{
-			Error: &Error{
-				Code:    101,
-				Message: "unauthorized",
-			},
-		})
-	}
-
-	return ctx.JSON(ConnectResponse{
-		Result: &ConnectResult{
-			User: req.Data.Username,
-		},
-	})
 }

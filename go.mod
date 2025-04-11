@@ -1,31 +1,15 @@
 module s0709-22
 
-go 1.22.12
+go 1.24.2
 
 require (
-	github.com/centrifugal/centrifuge-go v0.10.4
-	github.com/gofiber/fiber/v2 v2.52.6
+	google.golang.org/grpc v1.71.1
+	google.golang.org/protobuf v1.36.6
 )
 
 require (
-	github.com/andybalholm/brotli v1.1.0 // indirect
-	github.com/centrifugal/protocol v0.14.0 // indirect
-	github.com/google/uuid v1.6.0 // indirect
-	github.com/gorilla/websocket v1.5.0 // indirect
-	github.com/josharian/intern v1.0.0 // indirect
-	github.com/jpillora/backoff v1.0.0 // indirect
-	github.com/klauspost/compress v1.17.9 // indirect
-	github.com/mailru/easyjson v0.7.7 // indirect
-	github.com/mattn/go-colorable v0.1.13 // indirect
-	github.com/mattn/go-isatty v0.0.20 // indirect
-	github.com/mattn/go-runewidth v0.0.16 // indirect
-	github.com/planetscale/vtprotobuf v0.6.0 // indirect
-	github.com/rivo/uniseg v0.2.0 // indirect
-	github.com/segmentio/asm v1.2.0 // indirect
-	github.com/segmentio/encoding v0.4.0 // indirect
-	github.com/valyala/bytebufferpool v1.0.0 // indirect
-	github.com/valyala/fasthttp v1.51.0 // indirect
-	github.com/valyala/tcplisten v1.0.0 // indirect
-	golang.org/x/sys v0.28.0 // indirect
-	google.golang.org/protobuf v1.33.0 // indirect
+	golang.org/x/net v0.39.0 // indirect
+	golang.org/x/sys v0.32.0 // indirect
+	golang.org/x/text v0.24.0 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20250409194420-de1ac958c67a // indirect
 )
