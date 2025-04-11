@@ -4,16 +4,35 @@ import (
 	"context"
 	"encoding/json"
 	"s0709-22/internal/proxyproto"
+	"s0709-22/services/connect-service/internal/userdb"
+	"strconv"
+
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 // Service ...
 type Service struct {
 	proxyproto.UnimplementedCentrifugoProxyServer
+	conn    *pgxpool.Pool
+	storage *userdb.Queries
 }
 
 // New ...
-func New() *Service {
-	return &Service{}
+func New(uri string) (*Service, error) {
+	connCfg, err := pgxpool.ParseConfig(uri)
+	if err != nil {
+		return nil, err
+	}
+
+	conn, err := pgxpool.NewWithConfig(context.Background(), connCfg)
+	if err != nil {
+		return nil, err
+	}
+
+	return &Service{
+		conn:    conn,
+		storage: userdb.New(conn),
+	}, nil
 }
 
 // AuthData ...
@@ -26,27 +45,22 @@ type AuthData struct {
 func (s *Service) Connect(ctx context.Context, request *proxyproto.ConnectRequest) (*proxyproto.ConnectResponse, error) {
 	auth := &AuthData{}
 
-	response := &proxyproto.ConnectResponse{}
-
 	if err := json.Unmarshal(request.Data, auth); err != nil {
-		response.Error = &proxyproto.Error{
-			Code:    107,
-			Message: "bad request",
-		}
-		return response, nil
+		return RespondError(107, "bad request")
 	}
 
-	if auth.Username != "alex" || auth.Password != "qwerty" {
-		response.Error = &proxyproto.Error{
-			Code:    101,
-			Message: "unauthorized",
-		}
-		return response, nil
+	account, err := s.storage.GetUserByUsermame(ctx, auth.Username)
+	if err != nil {
+		return RespondError(101, "unauthorized")
 	}
 
-	response.Result = &proxyproto.ConnectResult{
-		User: "alex",
+	if auth.Password != account.Password {
+		return RespondError(101, "unauthorized")
 	}
 
-	return response, nil
+	return &proxyproto.ConnectResponse{
+		Result: &proxyproto.ConnectResult{
+			User: strconv.FormatInt(account.ID, 10),
+		},
+	}, nil
 }
