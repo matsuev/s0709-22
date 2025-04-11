@@ -4,7 +4,9 @@ import (
 	"log"
 	"net"
 	"s0709-22/internal/demoapi"
+	"s0709-22/internal/testapi"
 
+	"github.com/matsuev/demoapi/pkg/example"
 	"google.golang.org/grpc"
 )
 
@@ -18,7 +20,10 @@ func main() {
 
 	svc := NewDemoService()
 
+	example.Hello()
+
 	demoapi.RegisterDemoServiceServer(srv, svc)
+	testapi.RegisterTestServiceServer(srv, testapi.UnimplementedTestServiceServer{})
 
 	if err := srv.Serve(listener); err != nil {
 		log.Fatalln()

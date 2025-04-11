@@ -3,6 +3,7 @@ module s0709-22
 go 1.22.12
 
 require (
+	github.com/matsuev/demoapi v0.0.0-20250410114340-8186b9ce8b84
 	google.golang.org/grpc v1.71.1
 	google.golang.org/protobuf v1.36.6
 )

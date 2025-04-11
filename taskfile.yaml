@@ -4,7 +4,17 @@ tasks:
   tidy:
     cmd: go mod tidy
 
+  genapi:
+    cmds:
+      - task: demoapi
+      - task: testapi
+
   demoapi:
     cmds:
       - protoc -I ./contracts demoapi.proto --go_out=./internal/demoapi --go-grpc_out=./internal/demoapi
+      - task: tidy
+
+  testapi:
+    cmds:
+      - protoc -I ./contracts testapi.proto --go_out=./internal/testapi --go-grpc_out=./internal/testapi
       - task: tidy
