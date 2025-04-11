@@ -12,7 +12,10 @@ import (
 	"google.golang.org/grpc"
 )
 
-const ConnString = "postgres://appuser:apppass@127.0.0.1:5432/userdb?sslmode=disable"
+const (
+	// ConnString ...
+	ConnString = "postgres://appuser:apppass@127.0.0.1:5432/userdb?sslmode=disable"
+)
 
 func main() {
 	listener, err := net.Listen("tcp4", "127.0.0.1:10000")
