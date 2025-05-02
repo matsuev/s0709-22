@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 	"s0709-22/internal/proxyproto"
-	"s0709-22/services/connect-service/internal/userdb"
+	"s0709-22/internal/userdb"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )

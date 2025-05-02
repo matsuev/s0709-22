@@ -1,10 +1,10 @@
 version: "2"
 sql:
   - engine: "postgresql"
-    queries: "./services/connect-service/queries"
+    queries: "./queries"
     schema: "./migrations/userdb"
     gen:
       go:
         package: "userdb"
-        out: "./services/connect-service/internal/userdb"
+        out: "./internal/userdb"
         sql_package: "pgx/v5"
