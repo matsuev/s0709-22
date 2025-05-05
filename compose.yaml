@@ -52,6 +52,7 @@ services:
       - KC_LOG_LEVEL=info
       - KC_METRICS_ENABLED=false
       - KC_HEALTH_ENABLED=false
+      - KC_BOOTSTRAP_ADMIN_USERNAME=${ADMIN_USER}
       - KC_BOOTSTRAP_ADMIN_PASSWORD=${ADMIN_PASSWORD}
     depends_on:
       - auth-database
